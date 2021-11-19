@@ -1,3 +1,5 @@
+// ignore_for_file: must_call_super
+
 import 'package:boardview/board_item.dart';
 import 'package:boardview/boardview.dart';
 import 'package:flutter/material.dart';
@@ -80,10 +82,10 @@ class BoardListState extends State<BoardList> with AutomaticKeepAliveClientMixin
   Widget build(BuildContext context) {
     List<Widget> listWidgets = [];
     if (widget.header != null) {
-      Color? headerBackgroundColor = Color.fromARGB(255, 255, 255, 255);
-      if (widget.headerBackgroundColor != null) {
-        headerBackgroundColor = widget.headerBackgroundColor;
-      }
+      // Color? headerBackgroundColor = Color.fromARGB(255, 255, 255, 255);
+      // if (widget.headerBackgroundColor != null) {
+      //   headerBackgroundColor = widget.headerBackgroundColor;
+      // }
       listWidgets.add(GestureDetector(
           onTap: (){
             if(widget.onTapList != null){
@@ -174,7 +176,7 @@ class BoardListState extends State<BoardList> with AutomaticKeepAliveClientMixin
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
-          children: listWidgets as List<Widget>,
+          children: listWidgets,
         ));
   }
 }

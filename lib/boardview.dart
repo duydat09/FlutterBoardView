@@ -1,7 +1,6 @@
+// ignore_for_file: must_be_immutable, must_call_super
+
 library boardview;
-
-import 'dart:math';
-
 import 'package:boardview/boardview_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -137,7 +136,7 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
     widget.lists!.insert(draggedListIndex!, list);
     listStates.insert(draggedListIndex!, listState);
     canDrag = false;
-    if (boardViewController != null && boardViewController.hasClients) {
+    if (boardViewController.hasClients) {
       int? tempListIndex = draggedListIndex;
       boardViewController
           .animateTo(draggedListIndex! * widget.width, duration: new Duration(milliseconds: 400), curve: Curves.ease)
@@ -170,7 +169,7 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
     double closestValue = 10000;
     draggedItemIndex = 0;
     for (int i = 0; i < listStates[draggedListIndex!].itemStates.length; i++) {
-      if (listStates[draggedListIndex!].itemStates[i].mounted && listStates[draggedListIndex!].itemStates[i].context != null) {
+      if (listStates[draggedListIndex!].itemStates[i].mounted) {
         RenderBox box = listStates[draggedListIndex!].itemStates[i].context.findRenderObject() as RenderBox;
         Offset pos = box.localToGlobal(Offset.zero);
         var temp = (pos.dy - dy! + (box.size.height / 2)).abs();
@@ -187,7 +186,7 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
     if(listStates[draggedListIndex!].mounted) {
       listStates[draggedListIndex!].setState(() {});
     }
-    if (boardViewController != null && boardViewController.hasClients) {
+    if (boardViewController.hasClients) {
       int? tempListIndex = draggedListIndex;
       int? tempItemIndex = draggedItemIndex;
       boardViewController
@@ -222,7 +221,7 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
     widget.lists!.insert(draggedListIndex!, list);
     listStates.insert(draggedListIndex!, listState);
     canDrag = false;
-    if (boardViewController != null && boardViewController.hasClients) {
+    if (boardViewController.hasClients) {
       int? tempListIndex = draggedListIndex;
       boardViewController
           .animateTo(draggedListIndex! * widget.width, duration: new Duration(milliseconds: widget.dragDelay), curve: Curves.ease)
@@ -255,7 +254,7 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
     double closestValue = 10000;
     draggedItemIndex = 0;
     for (int i = 0; i < listStates[draggedListIndex!].itemStates.length; i++) {
-      if (listStates[draggedListIndex!].itemStates[i].mounted && listStates[draggedListIndex!].itemStates[i].context != null) {
+      if (listStates[draggedListIndex!].itemStates[i].mounted) {
         RenderBox box = listStates[draggedListIndex!].itemStates[i].context.findRenderObject() as RenderBox;
         Offset pos = box.localToGlobal(Offset.zero);
         var temp = (pos.dy - dy! + (box.size.height / 2)).abs();
@@ -272,7 +271,7 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
     if(listStates[draggedListIndex!].mounted) {
       listStates[draggedListIndex!].setState(() {});
     }
-    if (boardViewController != null && boardViewController.hasClients) {
+    if (boardViewController.hasClients) {
       int? tempListIndex = draggedListIndex;
       int? tempItemIndex = draggedItemIndex;
       boardViewController
@@ -300,9 +299,6 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
 
   @override
   Widget build(BuildContext context) {
-    print("dy:${dy}");
-    print("topListY:${topListY}");
-    print("bottomListY:${bottomListY}");
     if(boardViewController.hasClients) {
       WidgetsBinding.instance!.addPostFrameCallback((Duration duration) {
         try {
@@ -404,14 +400,13 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
         offsetY != null &&
         dx != null &&
         dy != null &&
-        height != null &&
-        widget.width != null) {
+        height != null) {
       if (canDrag && dxInit != null && dyInit != null && !isInBottomWidget) {
         if (draggedItemIndex != null && draggedItem != null && topItemY != null && bottomItemY != null) {
           //dragging item
           if (0 <= draggedListIndex! - 1 && dx! < leftListX! + 45) {
             //scroll left
-            if (boardViewController != null && boardViewController.hasClients) {
+            if (boardViewController.hasClients) {
               boardViewController.animateTo(boardViewController.position.pixels - 5,
                   duration: new Duration(milliseconds: 10), curve: Curves.ease);
               if(listStates[draggedListIndex!].mounted) {
@@ -425,7 +420,7 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
           }
           if (widget.lists!.length > draggedListIndex! + 1 && dx! > rightListX! - 45) {
             //scroll right
-            if (boardViewController != null && boardViewController.hasClients) {
+            if (boardViewController.hasClients) {
               boardViewController.animateTo(boardViewController.position.pixels + 5,
                   duration: new Duration(milliseconds: 10), curve: Curves.ease);
               if(listStates[draggedListIndex!].mounted) {
@@ -447,8 +442,7 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
           }
           if (dy! < topListY! + 70) {
             //scroll up
-            if (listStates[draggedListIndex!].boardListController != null &&
-                listStates[draggedListIndex!].boardListController.hasClients && !isScrolling) {
+            if (listStates[draggedListIndex!].boardListController.hasClients && !isScrolling) {
               isScrolling = true;
               double pos = listStates[draggedListIndex!].boardListController.position.pixels;
               listStates[draggedListIndex!].boardListController.animateTo(
@@ -486,14 +480,12 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
               RenderBox _box = _middleWidgetKey.currentContext!
                   .findRenderObject() as RenderBox;
               tempBottom = _box.size.height;
-              print("tempBottom:${tempBottom}");
             }
           }
           if (dy! > tempBottom! - 70) {
             //scroll down
 
-            if (listStates[draggedListIndex!].boardListController != null &&
-                listStates[draggedListIndex!].boardListController.hasClients) {
+            if (listStates[draggedListIndex!].boardListController.hasClients) {
               isScrolling = true;
               double pos = listStates[draggedListIndex!].boardListController.position.pixels;
               listStates[draggedListIndex!].boardListController.animateTo(
@@ -528,7 +520,7 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
           //dragging list
           if (0 <= draggedListIndex! - 1 && dx! < leftListX! + 45) {
             //scroll left
-            if (boardViewController != null && boardViewController.hasClients) {
+            if (boardViewController.hasClients) {
               boardViewController.animateTo(boardViewController.position.pixels - 5,
                   duration: new Duration(milliseconds: 10), curve: Curves.ease);
               if(leftListX != null){
@@ -542,7 +534,7 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
 
           if (widget.lists!.length > draggedListIndex! + 1 && dx! > rightListX! - 45) {
             //scroll right
-            if (boardViewController != null && boardViewController.hasClients) {
+            if (boardViewController.hasClients) {
               boardViewController.animateTo(boardViewController.position.pixels + 5,
                   duration: new Duration(milliseconds: 10), curve: Curves.ease);
               if(leftListX != null){

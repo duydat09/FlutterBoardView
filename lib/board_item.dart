@@ -1,3 +1,5 @@
+// ignore_for_file: must_call_super
+
 import 'package:boardview/board_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';

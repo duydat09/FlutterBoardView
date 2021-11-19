@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:boardview/board_item.dart';
 import 'package:boardview/board_list.dart';
 import 'package:boardview/boardview_controller.dart';
@@ -44,7 +46,7 @@ class BoardViewExample extends StatelessWidget {
             int? oldItemIndex, BoardItemState? state) {
           //Used to update our local item data
           var item = _listData[oldListIndex!].items![oldItemIndex!];
-          _listData[oldListIndex].items!.removeAt(oldItemIndex!);
+          _listData[oldListIndex].items!.removeAt(oldItemIndex);
           _listData[listIndex!].items!.insert(itemIndex!, item);
         },
         onTapItem: (int? listIndex, int? itemIndex, BoardItemState? state) async {
@@ -74,7 +76,7 @@ class BoardViewExample extends StatelessWidget {
       onDropList: (int? listIndex, int? oldListIndex) {
         //Update our local list data
         var list = _listData[oldListIndex!];
-        _listData.removeAt(oldListIndex!);
+        _listData.removeAt(oldListIndex);
         _listData.insert(listIndex!, list);
       },
       headerBackgroundColor: Color.fromARGB(255, 235, 236, 240),

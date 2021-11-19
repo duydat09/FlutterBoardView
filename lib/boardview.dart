@@ -35,8 +35,8 @@ typedef void OnDropList(int? listIndex);
 
 class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin {
   Widget? draggedItem;
-  int? draggedItemIndex;
-  int? draggedListIndex;
+  var draggedItemIndex;
+  var draggedListIndex;
   double? dx;
   double? dxInit;
   double? dyInit;
@@ -489,23 +489,24 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
               isScrolling = true;
               double pos = listStates[draggedListIndex!].boardListController.position.pixels;
               listStates[draggedListIndex!].boardListController.animateTo(
-                  listStates[draggedListIndex!].boardListController.position.pixels + 5,
-                  duration: new Duration(milliseconds: 10),
-                  curve: Curves.ease).whenComplete((){
-                pos -= listStates[draggedListIndex!].boardListController.position.pixels;
-                if(initialY == null)
-                  initialY = 0;
-//                if(widget.boardViewController != null) {
-//                  initialY -= pos;
-//                }
+                listStates[draggedListIndex!].boardListController.position.pixels + 5,
+                duration: new Duration(milliseconds: 10),
+                curve: Curves.ease
+              ).whenComplete((){
+                if (draggedListIndex != null) pos -= listStates[draggedListIndex].boardListController.position.pixels;
+                
+                if (initialY == null) initialY = 0;
                 isScrolling = false;
-                if(topItemY != null) {
+                
+                if (topItemY != null) {
                   topItemY = topItemY! + pos;
                 }
-                if(bottomItemY != null) {
+
+                if (bottomItemY != null) {
                   bottomItemY = bottomItemY! + pos;
                 }
-                if(mounted){
+
+                if (mounted){
                   setState(() {});
                 }
               });
